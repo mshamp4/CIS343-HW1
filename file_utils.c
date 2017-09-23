@@ -13,17 +13,21 @@ int read_file(char* filename, char** buffer) {
 	// TO-DO: make sure memory call completes successfully
 	*buffer = (char*)malloc(sizeof(char) * size + 1);
  
-	char value = NULL;
-	for (int i = 0; value != EOF; i++) {
-		value = fgetc(file);
-		printf("%c", value);
-		buffer[i] = &value; // error here
-	}
+//	char value = NULL;
+	
+	fread(*buffer, sizeof(char), size, file);
+	
+	
+//	for (int i = 0; value != EOF; i++) {
+//		value = fgetc(file);
+//		printf("%c", value);
+//		buffer[i] = &value; // error here
+//	}
 
 	if (fclose(file) != 0) {
 		return 1;
 	}
-	return 0;
+	return size;
 }
 
 int write_file(char* filename, char* buffer, int size) {
