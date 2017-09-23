@@ -12,6 +12,10 @@ int main(int argc, char** argv){
 	char* buffer;
 	read_file(argv[1], &buffer);
 	
+	for (int i = 0; i < 4; i++) {
+		printf("%c", buffer[i]);
+	}
+	
 	free(buffer);
 	//write_file(char* filename, char* buffer, int size);
 	
