@@ -37,7 +37,7 @@ int read_file(char* filename, char** buffer) {
 int write_file(char* filename, char* buffer, int size) {
         FILE *wrtFile = fopen(filename, "w");
 //      printf("%i", size);
-//      size = size - 2;
+        size = size - 2;
         while (size >= 0) {
                 fputc(buffer[size], wrtFile);
                 size--;
