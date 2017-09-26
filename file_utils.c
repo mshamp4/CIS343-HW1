@@ -2,34 +2,39 @@
 #include <stdlib.h>
 #include "file_utils.h"
 
-int main(int argc, char** argv){
-        if (argc != 3) {
-                fprintf(stderr, "Error! invalid arguments\nUsage: %s [input file] "
-                "[output file]\n", argv[0]);
-                return 1;
+int read_file(char* filename, char** buffer) {
+        FILE *file = fopen(filename, "r");
+
+        if (file == NULL) {
+                return -1;
         }
 
-        char* buffer;
-        int size = read_file(argv[1], &buffer);
+        fseek(file, 0L, SEEK_END);
+        long size = ftell(file);
+        fseek(file, 0L, SEEK_SET);
 
-        if (size == -1) {
-                fprintf(stderr, "Error reading file!\n");
-                return 1;
+        // TO-DO: make sure memory call completes successfully
+        *buffer = (char*)malloc(sizeof(char) * size);
+
+        fread(*buffer, sizeof(char), size, file);
+
+        if (fclose(file) != 0) {
+                return -1;
         }
 
-        int end = size - 1;
-        int start = 0;
+        return size;
+}
 
-        while (end > start) {
-                char temp = buffer[end];
-                buffer[end] = buffer[start];
-                buffer[start] = temp;
-                end--;
-                start++;
+int write_file(char* filename, char* buffer, int size) {
+        FILE *wrtFile = fopen(filename, "w");
+
+        for (int i = 0; i < size; i++) {
+                fputc(buffer[i], wrtFile);
         }
 
-        write_file(argv[2], buffer, size);
+        if (fclose(wrtFile) != 0) {
+                return -1;
+        }
 
-        free(buffer);
         return 0;
 }
